@@ -46,12 +46,19 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.inappmessaging.display)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
     implementation ("com.airbnb.android:lottie:6.6.1")
     implementation ("com.google.android.material:material:1.9.0")
+
+
+// ... other androidx dependencies
+// add the dependency for the Google AI client SDK for Android
+
+
 
 
 }
