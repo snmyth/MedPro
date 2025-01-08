@@ -5,7 +5,7 @@
 
     <!-- Rounded corners -->
     <corners android:radius="150dp"/>
-    <stroke android:color="@color/primary_bg"
+    <stroke android:color="#757575"
         android:width="1dp"/>
 
     <!-- Optional shadow for depth -->
