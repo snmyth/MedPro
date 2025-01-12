@@ -1,12 +1,18 @@
 package com.example.medpro;
 
+import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +42,6 @@ public class AccountFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment AccountFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AccountFragment newInstance(String param1, String param2) {
         AccountFragment fragment = new AccountFragment();
         Bundle args = new Bundle();
@@ -59,6 +64,38 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+
+        // Find the ConstraintLayout by ID
+        final ConstraintLayout constraintLayout = view.findViewById(R.id.constraintLayout);
+
+        // Set an OnClickListener to animate the view on click
+        constraintLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an ObjectAnimator for translation (flip effect)
+                ObjectAnimator animator = ObjectAnimator.ofFloat(constraintLayout, "translationX", 0f, 50f);  // 50f is the amount of movement
+                animator.setDuration(300);  // Duration of the animation
+                animator.setRepeatCount(1);  // Repeat once to go back to the original position
+                animator.setRepeatMode(ObjectAnimator.REVERSE);  // Flip the direction after the first movement
+                animator.start();  // Start the animation
+            }
+        });
+
+        // Find the Button by ID
+        Button myButton = view.findViewById(R.id.button3);
+
+        // Set an OnClickListener for the button
+        myButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                 Toast.makeText(getActivity(), "Logging Out", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return view;
     }
 }
