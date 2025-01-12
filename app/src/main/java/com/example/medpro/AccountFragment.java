@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,9 +83,13 @@ public class AccountFragment extends Fragment {
                 animator.start();  // Start the animation
             }
         });
-
-        // Find the Button by ID
+        FirebaseAuth auth;
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser user;
+        user = auth.getCurrentUser();
         Button myButton = view.findViewById(R.id.button3);
+        TextView tv = view.findViewById(R.id.gmailString);
+        tv.setText(user.getEmail());
 
         // Set an OnClickListener for the button
         myButton.setOnClickListener(new View.OnClickListener() {
