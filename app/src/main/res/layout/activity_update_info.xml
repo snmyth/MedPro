@@ -1,0 +1,165 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".updateInfo">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationView1"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/upinfo" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Set Your Information"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textSize="28sp"
+
+        app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/upshape"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TableLayout
+            android:id="@+id/tableLayout2"
+            android:layout_width="461dp"
+            android:layout_height="479dp"
+            android:layout_margin="8dp"
+            android:divider="@drawable/divider"
+            android:showDividers="middle"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <!-- Each TableRow Updated for Compact Design -->
+            <TableRow
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:id="@+id/labelAge"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Age:"
+
+                    android:textSize="24sp" />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerAge"
+                    android:layout_width="50dp"
+                    android:layout_height="150dp" />
+            </TableRow>
+
+            <!-- Similar styling applied to Weight, Height, and Mobile Rows -->
+            <TableRow
+                android:layout_height="132dp"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:id="@+id/labelWeight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Weight (kg):"
+                    android:textSize="24sp" />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerWeight"
+                    android:layout_width="100dp"
+                    android:layout_height="150dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:id="@+id/labelHeight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Height (cm):"
+                    android:textSize="24sp" />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerHeight"
+                    android:layout_width="100dp"
+                    android:layout_height="150dp" />
+            </TableRow>
+
+
+        </TableLayout>
+
+        <EditText
+            android:id="@+id/editTextMobile"
+            android:layout_width="435dp"
+            android:layout_height="75dp"
+            android:layout_margin="32dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/rounded_layout"
+            android:backgroundTint="#CCCCCC"
+            android:fontFamily="@font/montserrat_semibold"
+            android:hint="Enter Mobile Number"
+            android:inputType="phone"
+            android:padding="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/submitButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout2"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="390dp"
+            android:layout_height="82dp"
+            android:layout_margin="24dp"
+            android:backgroundTint="@color/primary_bg"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Submit"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.455"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout2"
+            app:layout_constraintVertical_bias="0.897" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

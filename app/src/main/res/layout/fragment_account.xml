@@ -12,16 +12,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_width="400dp"
+        android:layout_height="628dp"
         android:layout_margin="40dp"
         android:background="@drawable/feat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.229">
+        app:layout_constraintVertical_bias="0.327">
 
         <TextView
             android:id="@+id/gmailString"
@@ -29,12 +28,14 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_semibold"
             android:text="samplegmail@gmail.com"
-            android:textColor="@color/black"
+
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView1" />
+            app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView1"
+            app:layout_constraintVertical_bias="0.099" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieAnimationView1"
@@ -43,10 +44,9 @@
             android:foregroundGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.508"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintVertical_bias="0.465"
+            app:layout_constraintVertical_bias="0.059"
             app:lottie_autoPlay="true"
             app:lottie_loop="false"
             app:lottie_rawRes="@raw/mugshot" />
@@ -57,13 +57,157 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_semibold"
             android:text="Your Account"
-            android:textColor="@color/black"
+
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.506"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.07" />
+            app:layout_constraintVertical_bias="0.026" />
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="340dp"
+            android:layout_height="243dp"
+            android:layout_margin="16dp"
+            android:divider="@drawable/divider"
+            android:padding="16dp"
+            android:showDividers="beginning"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.644"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gmailString"
+            app:layout_constraintVertical_bias="0.089">
+
+            <!-- Header Row -->
+            <TableRow
+                android:layout_width="322dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="178dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnSpan="2"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:gravity="start"
+                    android:padding="8dp"
+                    android:text="Personal Info"
+
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <!-- Height Row -->
+            <TableRow>
+
+                <TextView
+                    android:layout_width="195dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:padding="8dp"
+                    android:text="Height:"
+
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/heightValue"
+                    android:layout_width="98dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_thin"
+                    android:padding="8dp"
+                    android:text="Not Set"
+
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <!-- Weight Row -->
+            <TableRow>
+
+                <TextView
+                    android:layout_width="195dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:padding="8dp"
+                    android:text="Weight:"
+
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/weightValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_thin"
+                    android:padding="8dp"
+                    android:text="Not Set"
+
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <!-- Age Row -->
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:padding="8dp"
+                    android:text="Age:"
+
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/ageValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_thin"
+                    android:padding="8dp"
+                    android:text="Not Set"
+
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:padding="8dp"
+                    android:text="Phone:"
+
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_thin"
+                    android:padding="8dp"
+                    android:text="Not Set"
+
+                    android:textSize="16sp" />
+            </TableRow>
+        </TableLayout>
+
+        <Button
+            android:id="@+id/addInfoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/cardview_light_background"
+            android:fontFamily="@font/montserrat_semibold"
+            android:paddingVertical="12dp"
+            android:text="Update Information"
+            android:textColor="@color/black"
+
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -79,8 +223,9 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        app:layout_constraintVertical_bias="0.044" />
+        app:layout_constraintVertical_bias="0.325" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

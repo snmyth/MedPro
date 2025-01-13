@@ -2,13 +2,17 @@ package com.example.medpro;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.annotation.SuppressLint;
+import android.widget.NumberPicker;
 
 import androidx.fragment.app.Fragment;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -75,6 +79,7 @@ public class AccountFragment extends Fragment {
         constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Create an ObjectAnimator for translation (flip effect)
                 ObjectAnimator animator = ObjectAnimator.ofFloat(constraintLayout, "translationX", 0f, 50f);  // 50f is the amount of movement
                 animator.setDuration(300);  // Duration of the animation
@@ -91,6 +96,32 @@ public class AccountFragment extends Fragment {
         TextView tv = view.findViewById(R.id.gmailString);
         tv.setText(user.getEmail());
 
+        TextView height, weight, age, phone;
+        height = view.findViewById(R.id.heightValue);
+        weight = view.findViewById(R.id.weightValue);
+        age = view.findViewById(R.id.ageValue);
+        phone = view.findViewById(R.id.phone);
+        userDetailsDBHelper udb = new userDetailsDBHelper(getActivity());
+        Cursor c = udb.getDataByGmail(user.getEmail());
+
+
+
+
+        height.setText("Not Set");
+        weight.setText("Not Set");
+        age.setText("Not Set");
+        phone.setText("Not Set");
+
+        Button addButton;
+        addButton =view.findViewById(R.id.addInfoButton);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), updateInfo.class);
+                startActivity(i);
+            }
+        });
+
         // Set an OnClickListener for the button
         myButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +130,7 @@ public class AccountFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
                  Toast.makeText(getActivity(), "Logging Out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Logged Out of "+user.getEmail(), Toast.LENGTH_SHORT).show();
             }
         });
 

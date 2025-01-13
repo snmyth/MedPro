@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MedPro">
         <activity
+            android:name=".updateInfo"
+            android:exported="false" />
+        <activity
             android:name=".chatInterface"
             android:exported="false" />
         <activity
