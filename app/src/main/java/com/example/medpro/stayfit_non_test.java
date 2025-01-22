@@ -3,11 +3,9 @@ package com.example.medpro;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-public class bluetoothStayfir extends AppCompatActivity {
+public class stayfit_non_test extends AppCompatActivity {
 
     private static final String TAG = "BluetoothSerial";
     private static final UUID UUID_SERIAL_PORT = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -32,7 +30,7 @@ public class bluetoothStayfir extends AppCompatActivity {
     private TextView gyroXTextView, gyroYTextView, gyroZTextView;
     private TextView accXTextView, accYTextView, accZTextView;
     private TextView temperatureTextView, speedTextView, inclinationTextView, caloriesTextView;
-    private Button startButton, stopButton, buttonnont;
+    private Button startButton, stopButton;
 
     private boolean isRunning = false;
     private double speed1 = 0; // km/h
@@ -41,7 +39,7 @@ public class bluetoothStayfir extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bluetooth_stayfir);
+        setContentView(R.layout.activity_stayfit_non_test);
 
         // Initialize views
         gyroXTextView = findViewById(R.id.gyroX);
@@ -56,7 +54,6 @@ public class bluetoothStayfir extends AppCompatActivity {
         caloriesTextView = findViewById(R.id.calories);
         startButton = findViewById(R.id.startButton);
         stopButton = findViewById(R.id.stopButton);
-        buttonnont = findViewById(R.id.button4);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -92,13 +89,6 @@ public class bluetoothStayfir extends AppCompatActivity {
         stopButton.setOnClickListener(v -> {
             isRunning = false;
             Toast.makeText(this, "Stopped", Toast.LENGTH_SHORT).show();
-        });
-        buttonnont.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(bluetoothStayfir.this,stayfit_non_test.class);
-                startActivity(i);
-            }
         });
     }
 
@@ -184,7 +174,7 @@ public class bluetoothStayfir extends AppCompatActivity {
 
             // Convert speed from m/s to km/h
             double speedInKmh = Math.abs(smoothedSpeed) * 3.6; // m/s to km/h
-            speedTextView.setText("Speed: " + String.format("%.2f km/h", speedInKmh-5));
+            speedTextView.setText("Speed: " + String.format("%.2f km/h", speedInKmh));
 
             // Inclination Calculation (just for reference)
             double inclination = Math.atan2(accY, accZ) * (180 / Math.PI);  // Convert radians to degrees

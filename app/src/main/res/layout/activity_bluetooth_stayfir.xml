@@ -209,6 +209,14 @@
                 android:text="Stop"
                 android:backgroundTint="#F44336"
                 android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="30dp"
+                android:layout_margin="4dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Non Test UI" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
