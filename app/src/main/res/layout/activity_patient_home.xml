@@ -34,6 +34,7 @@
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:elevation="4dp"
             android:layout_alignParentBottom="true">
 
             <!-- BottomAppBar -->
@@ -53,7 +54,6 @@
                     android:id="@+id/bottom_nav"
                     android:layout_marginEnd="12dp"
                     android:layout_width="match_parent"
-                    android:background="@android:color/transparent"
                     android:elevation="0dp"
                     android:layout_height="wrap_content"
                     app:menu="@menu/bottom_nav_menu"
@@ -61,16 +61,7 @@
             </com.google.android.material.bottomappbar.BottomAppBar>
 
             <!-- FloatingActionButton -->
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#E04D9B"
-                android:contentDescription="AI"
-                android:src="@drawable/baseline_auto_awesome_24"
-                android:tooltipText="Chat With AI"
-                app:layout_anchor="@+id/bottom_app_bar"
-                app:layout_anchorGravity="top|center" />
+
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

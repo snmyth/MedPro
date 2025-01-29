@@ -12,6 +12,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -29,17 +33,47 @@ public class stayfit_non_test extends AppCompatActivity {
 
     private TextView gyroXTextView, gyroYTextView, gyroZTextView;
     private TextView accXTextView, accYTextView, accZTextView;
-    private TextView temperatureTextView, speedTextView, inclinationTextView, caloriesTextView;
-    private Button startButton, stopButton;
+    private TextView temperatureTextView, speedTextView, inclinationTextView, caloriesTextView, cadenceTextView;
+    private TextView timeElapsedTextView, distanceTravelledTextView;
+    private Button startButton, stopButton, calibrateButton, endButton;
 
     private boolean isRunning = false;
     private double speed1 = 0; // km/h
     private double caloriesBurnt1 = 0;
+    private double totalSpeed = 0; // For calculating average speed
+    private int speedCount = 0; // For counting speed readings
+    private double inclinationOffset = 0.0; // For calibration
+
+    private long startTime = 0;
+    private Handler timeHandler = new Handler();
+    private Runnable updateTimeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (isRunning) {
+                long elapsedMillis = System.currentTimeMillis() - startTime;
+                int seconds = (int) (elapsedMillis / 1000) % 60;
+                int minutes = (int) (elapsedMillis / 1000) / 60;
+                String timeString = String.format("%02d:%02d", minutes, seconds);
+                timeElapsedTextView.setText(timeString);
+                timeHandler.postDelayed(this, 1000);
+            }
+        }
+    };
+
+    private double totalDistance = 0; // Total distance travelled in meters
+    private double previousSpeed = 0;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stayfit_non_test);
+
+        // Initialize Firebase Authentication and Realtime Database
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference("sessions");
 
         // Initialize views
         gyroXTextView = findViewById(R.id.gyroX);
@@ -52,8 +86,12 @@ public class stayfit_non_test extends AppCompatActivity {
         speedTextView = findViewById(R.id.speed);
         inclinationTextView = findViewById(R.id.inclination);
         caloriesTextView = findViewById(R.id.calories);
+        cadenceTextView = findViewById(R.id.cadence);
+        timeElapsedTextView = findViewById(R.id.timeElapsed);
+        distanceTravelledTextView = findViewById(R.id.distanceTravelled);
         startButton = findViewById(R.id.startButton);
         stopButton = findViewById(R.id.stopButton);
+        // Add End Button
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -82,14 +120,21 @@ public class stayfit_non_test extends AppCompatActivity {
         // Button listeners
         startButton.setOnClickListener(v -> {
             isRunning = true;
+            startTime = System.currentTimeMillis();
+            timeHandler.post(updateTimeRunnable);
             readSensorData();
             Toast.makeText(this, "Started", Toast.LENGTH_SHORT).show();
         });
 
         stopButton.setOnClickListener(v -> {
             isRunning = false;
+            timeHandler.removeCallbacks(updateTimeRunnable);
             Toast.makeText(this, "Stopped", Toast.LENGTH_SHORT).show();
+            saveSessionData();
+            Toast.makeText(this, "Session Ended", Toast.LENGTH_SHORT).show();
         });
+
+
     }
 
     private void readSensorData() {
@@ -101,7 +146,6 @@ public class stayfit_non_test extends AppCompatActivity {
                 while (isRunning) {
                     bytes = inputStream.read(buffer);
                     String data = new String(buffer, 0, bytes);
-
                     handler.post(() -> updateUI(data));
                 }
             } catch (IOException e) {
@@ -110,88 +154,107 @@ public class stayfit_non_test extends AppCompatActivity {
             }
         }).start();
     }
+
     private double previousTime = 0;
-    private double speed = 0.0; // Instantaneous speed in m/s
-    private double smoothedSpeed = 0.0; // Smoothed speed using low-pass filter
-    private final double NOISE_THRESHOLD = 0.05;  // Threshold for noise filtering
-    private final double MOVEMENT_THRESHOLD = 0.1;  // Threshold to detect movement
-    private final double dampingFactor = 0.1; // Low-pass filter factor (adjust for smoother results)
-    private double caloriesBurnt = 0.0; // Calories burned
+    private double speed = 0.0;
+    private double smoothedSpeed = 0.0;
+    private final double NOISE_THRESHOLD = 0.05;
+    private final double MOVEMENT_THRESHOLD = 0.1;
+    private final double dampingFactor = 0.1;
+    private double caloriesBurnt = 0.0;
 
     private void updateUI(String jsonData) {
         try {
             JSONObject jsonObject = new JSONObject(jsonData);
 
-            // Get accelerometer and gyroscope values
-            double accX = jsonObject.getDouble("accX");
             double accY = jsonObject.getDouble("accY");
             double accZ = jsonObject.getDouble("accZ");
+            double accX = jsonObject.getDouble("accX");
 
-            // Display accelerometer values
-            gyroXTextView.setText("Gyro X: " + jsonObject.getString("gyroX"));
-            gyroYTextView.setText("Gyro Y: " + jsonObject.getString("gyroY"));
-            gyroZTextView.setText("Gyro Z: " + jsonObject.getString("gyroZ"));
-            accXTextView.setText("Acc X: " + accX);
-            accYTextView.setText("Acc Y: " + accY);
-            accZTextView.setText("Acc Z: " + accZ);
-            temperatureTextView.setText("Temp: " + jsonObject.getString("temperature"));
+            int cadence = jsonObject.getInt("cadence");
 
-            // Time calculation (if previousTime is 0, set it to current time)
             double currentTime = System.currentTimeMillis();
             if (previousTime == 0) {
                 previousTime = currentTime;
+                return;
             }
 
-            double deltaTime = (currentTime - previousTime) / 1000.0; // in seconds
+            double deltaTime = (currentTime - previousTime) / 1000.0;
             previousTime = currentTime;
 
-            // Remove gravity effect and calculate net acceleration on the X and Y axes
-            double netAccX = accX - 9.8;  // Gravity effect on X-axis
-            double netAccY = accY - 9.8;  // Gravity effect on Y-axis
+            double netAccY = Math.abs(accY);
 
-            // Calculate the horizontal acceleration magnitude (ignoring Z-axis)
-            double netHorizontalAcceleration = Math.sqrt(netAccX * netAccX + netAccY * netAccY);
-
-            // If the net acceleration is too low, assume the sensor is stationary and reset speed
-            if (netHorizontalAcceleration < MOVEMENT_THRESHOLD) {
-                smoothedSpeed = 0;  // Reset speed when stationary
+            if (netAccY < MOVEMENT_THRESHOLD) {
+                smoothedSpeed = 0;
             } else {
-                // If there's movement, update speed based on the net horizontal acceleration
-                speed = netHorizontalAcceleration * deltaTime;
-                // Apply low-pass filter for damping
+                speed = netAccY * deltaTime;
                 smoothedSpeed = smoothedSpeed + dampingFactor * (speed - smoothedSpeed);
             }
 
-            // If smoothed speed is below the noise threshold, reset it to 0
             if (Math.abs(smoothedSpeed) < NOISE_THRESHOLD) {
                 smoothedSpeed = 0;
             }
 
-            // Cap the speed to a max value (for sanity)
-            if (Math.abs(smoothedSpeed) > 50) {  // Max speed cap (for sanity)
+            if (smoothedSpeed > 50) {
                 smoothedSpeed = 50;
             }
 
-            // Convert speed from m/s to km/h
-            double speedInKmh = Math.abs(smoothedSpeed) * 3.6; // m/s to km/h
-            speedTextView.setText("Speed: " + String.format("%.2f km/h", speedInKmh));
+            int speedInKmh = (int) Math.round(smoothedSpeed * 3.6);
+            speedTextView.setText(speedInKmh + " km/h");
 
-            // Inclination Calculation (just for reference)
-            double inclination = Math.atan2(accY, accZ) * (180 / Math.PI);  // Convert radians to degrees
-            inclinationTextView.setText("Inclination: " + String.format("%.2f°", inclination));
+            totalDistance += smoothedSpeed * deltaTime;
+            double totalDistanceInKm = totalDistance / 1000;
+            distanceTravelledTextView.setText(String.format("%.2f km", totalDistanceInKm));
 
-            // Calories Burnt Calculation (simple formula)
-            caloriesBurnt += (speedInKmh / 100) * 0.5; // Example formula
-            caloriesTextView.setText("Calories Burnt: " + String.format("%.2f kcal", caloriesBurnt));
+            int inclination = (int) Math.round(Math.atan2(accY, accZ) * (180 / Math.PI)) - (int) inclinationOffset;
+            inclinationTextView.setText(inclination + "°");
+
+            caloriesBurnt += (speedInKmh / 100.0) * 0.5;
+            int caloriesBurntRounded = (int) Math.round(caloriesBurnt);
+            caloriesTextView.setText(caloriesBurntRounded + " kcal");
+
+            double temperature = jsonObject.getDouble("temperature");
+            int roundedTemperature = (int) Math.round(temperature);
+            temperatureTextView.setText(roundedTemperature + "°C");
+
+            cadenceTextView.setText(cadence + " RPM");
+
+            if (speedInKmh > 0) {
+                totalSpeed += speedInKmh;
+                speedCount++;
+            }
+            double averageSpeed = speedCount > 0 ? totalSpeed / speedCount : 0;
+            TextView averageSpeedTextView = findViewById(R.id.averageSpeed);
+            averageSpeedTextView.setText(String.format("%.1f km/h", averageSpeed));
 
         } catch (Exception e) {
             Log.e(TAG, "Error parsing JSON", e);
         }
     }
 
+    private void saveSessionData() {
+        if (mAuth.getCurrentUser() == null) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        String userId = mAuth.getCurrentUser().getUid();
+        String userEmail = mAuth.getCurrentUser().getEmail();
+        double averageSpeed = (speedCount > 0) ? totalSpeed / speedCount : 0;
+        String totalTime = timeElapsedTextView.getText().toString();
+        double totalDistanceInKm = totalDistance / 1000;
 
+        Session session = new Session(userEmail, caloriesBurnt, averageSpeed, totalTime, totalDistanceInKm);
 
+        mDatabase.child(userId).push().setValue(session)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Session data saved successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Error saving session data", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
     @Override
     protected void onDestroy() {
@@ -202,6 +265,25 @@ public class stayfit_non_test extends AppCompatActivity {
             }
         } catch (IOException e) {
             Log.e(TAG, "Error closing socket", e);
+        }
+    }
+
+    public static class Session {
+        public String email;
+        public double caloriesBurnt;
+        public double averageSpeed;
+        public String totalTime;
+        public double distanceTravelled;
+
+        public Session() {
+        }
+
+        public Session(String email, double caloriesBurnt, double averageSpeed, String totalTime, double distanceTravelled) {
+            this.email = email;
+            this.caloriesBurnt = caloriesBurnt;
+            this.averageSpeed = averageSpeed;
+            this.totalTime = totalTime;
+            this.distanceTravelled = distanceTravelled;
         }
     }
 }

@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         getStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, sorter.class);
+                Intent i = new Intent(MainActivity.this, patient_login.class);
                 startActivity(i);
 
 

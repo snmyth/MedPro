@@ -7,20 +7,72 @@
     android:layout_height="match_parent"
     tools:context=".chatInterface">
 
-
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieAnimationView1"
-        android:layout_width="211dp"
-        android:layout_height="200dp"
+        android:layout_width="147dp"
+        android:layout_height="134dp"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.043"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/ldr" />
+
+    <LinearLayout
+        android:layout_width="482dp"
+        android:layout_height="650dp"
+        android:background="@drawable/bossx"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintVertical_bias="0.261">
+
+        <ScrollView
+            android:id="@+id/scrollViewAIResponse"
+            android:layout_width="426dp"
+            android:layout_height="515dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewUserMessage"
+            app:layout_constraintVertical_bias="0.148">
+
+            <TextView
+                android:id="@+id/textViewAIResponse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_extrabold"
+                android:text="AI's response will appear here."
+                android:textColor="@color/primary_text"
+                android:textSize="16sp" />
+        </ScrollView>
+
+        <Button
+            android:id="@+id/voicebtn"
+            android:layout_width="412dp"
+            android:layout_height="101dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:backgroundTint="@color/black"
+            android:drawableRight="@drawable/baseline_blur_on_24"
+            android:fontFamily="@font/montserrat_extrabold"
+            android:gravity="center"
+            android:text="Listen Amora"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/editTextTextMultiLine"
@@ -29,13 +81,16 @@
         android:background="@drawable/textsend"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="Say Hii To Amora!"
         android:inputType="textMultiLine"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/secondary_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.048"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:padding="16dp"
         app:layout_constraintVertical_bias="0.956" />
 
     <ImageButton
@@ -50,5 +105,38 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.959"
         app:srcCompat="@drawable/paper_plane_24" />
+
+    <!-- TextView for displaying user's entered message -->
+
+    <!-- ScrollView for displaying AI's response -->
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTextMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView1"
+        app:layout_constraintVertical_bias="0.015" />
+
+    <TextView
+        android:id="@+id/textViewUserMessage"
+        android:layout_width="345dp"
+        android:layout_height="64dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:padding="16dp"
+        android:text="Your Message"
+        android:textAlignment="textStart"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toEndOf="@+id/lottieAnimationView1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.64" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,4 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "MedPro"
 include(":app")
- 
+include(":auth-sample")
+include(":auth-lib")
+include(":app-remote-lib")
+include(":app-remote-sample")

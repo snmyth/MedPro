@@ -50,12 +50,19 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.play.services.maps)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    implementation ("com.airbnb.android:lottie:6.6.1")
-    implementation ("com.google.android.material:material:1.9.0")
+    implementation (libs.lottie)
+    implementation (libs.material.v190)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+
+
+
+
 
 
 // ... other androidx dependencies
