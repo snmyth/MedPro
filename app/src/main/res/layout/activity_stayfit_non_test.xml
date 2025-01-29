@@ -124,6 +124,9 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="8dp"
                         android:text="Cadence"
+                        android:fontFamily="@font/montserrat_extrabold"
+                        android:layout_gravity="center"
+
                         android:textColor="#555555"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -132,7 +135,8 @@
                         android:id="@+id/cadenceValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cadence: 0 RPM"
+                        android:layout_gravity="center"
+                        android:text="Cadence"
                         android:textColor="#000000"
                         android:textSize="18sp" />
                 </LinearLayout>

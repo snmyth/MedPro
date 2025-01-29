@@ -31,7 +31,7 @@ import okhttp3.Response;
 public class chatInterface extends AppCompatActivity implements OnInitListener {
 
     private static final String TAG = "chatInterface";
-    private static final String GEMINI_API_KEY = "AIzaSyA8wvMcSgwO0UcLuEE2kcdUQWDWPEXbge0";
+    private static final String GEMINI_API_KEY = "huh";
     private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + GEMINI_API_KEY;
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
