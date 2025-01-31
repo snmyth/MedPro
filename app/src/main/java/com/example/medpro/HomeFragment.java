@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment {
 
         // Query to get data by email
         String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();  // Replace with the dynamic email if needed
-        Query query = databaseReference.orderByChild("email").equalTo(userEmail);
+        Query query = databaseReference.orderByChild("sessionData/email").equalTo(userEmail);
 
         // Firebase data retrieval
         query.addValueEventListener(new ValueEventListener() {
@@ -93,14 +93,7 @@ public class HomeFragment extends Fragment {
                             cycleData data = sessionDataSnapshot.getValue(cycleData.class);
                             if (data != null) {
                                 arrayList.add(data); // Add the session data to the list
-                                Log.d("HomeFragment", "Session Data: " + sessionDataSnapshot.getKey());  // Log the session key
-                                Log.d("HomeFragment", "AverageSpeed: " + data.getAverageSpeed() +
-                                        ", CaloriesBurnt: " + data.getCaloriesBurnt() +
-                                        ", DistanceTravelled: " + data.getDistanceTravelled() +
-                                        ", TotalTime: " + data.getTotalTime());  // Log the session data
 
-                                // Display a Toast for each data entry
-                                Toast.makeText(getActivity(), "Data loaded: " + data.getAverageSpeed() + " km/h", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -114,8 +107,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("HomeFragment", "DatabaseError: " + error.getMessage());
-                Toast.makeText(getActivity(), "Error loading data", Toast.LENGTH_SHORT).show(); // Toast on error
+
             }
         });
 

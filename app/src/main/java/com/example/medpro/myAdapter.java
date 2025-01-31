@@ -32,11 +32,14 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.myViewHolder> {
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
         cycleData data = cycleData.get(position);
 
-        holder.averageSpeedText.setText(data.getAverageSpeed());
-        holder.caloriesBurntText.setText(data.getCaloriesBurnt());
-        holder.distanceTravelledText.setText(data.getDistanceTravelled());
-        holder.totalTimeText.setText(data.getTotalTime());
+        // Set text with headings and formatted values
+        holder.averageSpeedText.setText(String.format("Average Speed: %.2f km/h", data.getAverageSpeed()));
+        holder.caloriesBurntText.setText(String.format("Calories Burnt: %.2f kcal", data.getCaloriesBurnt()));
+        holder.distanceTravelledText.setText(String.format("Distance Travelled: %.2f km", data.getDistanceTravelled()));
+        holder.totalTimeText.setText(String.format("Total Time: %s", data.getTotalTime()));
     }
+
+
 
     @Override
     public int getItemCount() {
