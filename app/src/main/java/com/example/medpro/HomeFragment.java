@@ -74,42 +74,33 @@ public class HomeFragment extends Fragment {
 
         // Firebase reference
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("sessions");
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        // Query to get data by email
-        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();  // Replace with the dynamic email if needed
-        Query query = databaseReference.orderByChild("sessionData/email").equalTo(userEmail);
-
-        // Firebase data retrieval
-        query.addValueEventListener(new ValueEventListener() {
+        databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("HomeFragment", "onDataChange triggered");
-                arrayList.clear(); // Clear previous data
-
+                arrayList.clear();
                 if (snapshot.exists()) {
                     for (DataSnapshot sessionSnapshot : snapshot.getChildren()) {
-                        // Iterate over each session under the user
-                        for (DataSnapshot sessionDataSnapshot : sessionSnapshot.getChildren()) {
-                            cycleData data = sessionDataSnapshot.getValue(cycleData.class);
-                            if (data != null) {
-                                arrayList.add(data); // Add the session data to the list
-
-                            }
+                        cycleData data = sessionSnapshot.getValue(cycleData.class);
+                        if (data != null && userEmail.equals(data.getEmail())) {
+                            arrayList.add(data);  // Add only if emails match
                         }
                     }
-                    adapter.notifyDataSetChanged(); // Notify the adapter to update RecyclerView
-                    Toast.makeText(getActivity(), "Data loaded successfully", Toast.LENGTH_SHORT).show(); // Toast after data is loaded
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(getActivity(), "Data loaded successfully", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d("HomeFragment", "No matching data found for the email.");
-                    Toast.makeText(getActivity(), "No data found for the given email", Toast.LENGTH_SHORT).show(); // Toast when no data is found
+                    Toast.makeText(getActivity(), "No sessions found for the user.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.e("HomeFragment", "Database error: " + error.getMessage());
             }
         });
+
 
         // Start workout activity
         startWorkout.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +119,13 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        Button getReportButton = view.findViewById(R.id.getReport);
+        getReportButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), dateWiseReport.class);
+            startActivity(intent);
+        });
+
 
         return view;
     }

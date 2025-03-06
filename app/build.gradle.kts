@@ -35,7 +35,8 @@ android {
     }
 }
 
-dependencies {
+dependencies { // Latest stable
+
 
 
     implementation(libs.appcompat)
@@ -52,9 +53,25 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.firebase.database)
     implementation(libs.play.services.location)
+    implementation (libs.camera.camera2.v110)        // Camera2 API
+    implementation (libs.androidx.camera.lifecycle.v110)      // Lifecycle integration
+    implementation (libs.camera.view)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.guava)
+
+    implementation (libs.androidx.camera.video)
+
+
+            implementation ("org.tensorflow:tensorflow-lite:2.14.0")
+            implementation ("org.tensorflow:tensorflow-lite-support:0.4.3")
+            implementation ("org.tensorflow:tensorflow-lite-gpu:2.14.0")
+
+
+
+
 
     implementation (libs.lottie)
     implementation (libs.material.v190)
